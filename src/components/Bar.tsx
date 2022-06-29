@@ -1,3 +1,4 @@
+import "../styles/Bar.css";
 
 type Props = {
   width: number;
@@ -7,14 +8,12 @@ type Props = {
 }
 
 function Bar(props: Props) {
-  console.log(props);
   const styles = {
-    display: "inline-block",
-    width: props.width,
-    height: props.height,
+    width: props.width + "px",
+    height: props.height + "px",
     backgroundColor: props.color,
   }
-  return <div style={styles}></div>
+  return <div className="bar" style={styles}></div>
 }
 
 export default Bar; 
