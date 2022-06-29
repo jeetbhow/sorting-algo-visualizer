@@ -9,6 +9,7 @@ type Props = {
 function Bar(props: Props) {
   console.log(props);
   const styles = {
+    display: "inline-block",
     width: props.width,
     height: props.height,
     backgroundColor: props.color,
