@@ -1,11 +1,12 @@
 import AppData from "../utils/utils";
 import Bar from "./Bar";
 import "../styles/Canvas.css";
+import BarData from "../model/BarData";
 
 const BAR_WIDTH = AppData.CANVAS_WIDTH / AppData.MAX_VALUE;
 
 type Props = {
-  array: number[],
+  array: BarData[],
 }
 
 function Canvas(props: Props) {
@@ -17,13 +18,12 @@ function Canvas(props: Props) {
 
   return (
     <div style={styles} className="canvas">
-      {props.array.map(num =>
+      {props.array.map(barData =>
         <Bar
           key={new Date().getFullYear() + Math.random() * 34}
-          height={AppData.CANVAS_HEIGHT / AppData.MAX_VALUE * num}
+          height={AppData.CANVAS_HEIGHT / AppData.MAX_VALUE * barData.data}
           width={BAR_WIDTH}
-          color={AppData.DEFAULT_COLOR}
-          value={num}
+          color={barData.color}
         />)}
     </div>
   );

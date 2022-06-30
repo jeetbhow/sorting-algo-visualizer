@@ -3,7 +3,6 @@ import "../styles/Bar.css";
 type Props = {
   width: number;
   height: number;
-  value: number;
   color: string;
 }
 
