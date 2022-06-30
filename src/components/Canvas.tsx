@@ -1,4 +1,4 @@
-import AppData from "../utils/utils";
+import { AppData } from "../utils/utils";
 import Bar from "./Bar";
 import "../styles/Canvas.css";
 import BarData from "../model/BarData";

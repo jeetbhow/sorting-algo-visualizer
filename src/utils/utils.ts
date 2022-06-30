@@ -1,8 +1,11 @@
-const AppData = {
+export const AppData = {
   CANVAS_WIDTH: 800,
   CANVAS_HEIGHT: 500,
   MAX_VALUE: 100,
   DEFAULT_COLOR: "black",
 };
 
-export default AppData; 
+export const Algorithms = {
+  SELECTION_SORT: 0,
+  INSERTION_SORT: 1,
+}

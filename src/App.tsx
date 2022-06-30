@@ -1,8 +1,11 @@
-import AppData from "./utils/utils";
+import { AppData } from "./utils/utils";
+import { Algorithms } from "./utils/utils";
 import React, { useState, useRef } from "react";
 import Canvas from "./components/Canvas";
 import SortButton from "./components/SortButton";
 import BarData from "./model/BarData";
+import AlgoSelector from "./components/AlgoSelector";
+import { type } from "@testing-library/user-event/dist/type";
 
 // insertion sort generator. 
 function* insertionSort(array: BarData[]) {
@@ -18,12 +21,13 @@ function* insertionSort(array: BarData[]) {
   return array;
 }
 
-// we're going to generate an array of numbers from 1 - MAX_VALUE 
+// create a series of random bars. 
 const bars: BarData[] = [];
 for (let i = 1; i <= AppData.MAX_VALUE; ++i) {
   bars.push(new BarData(i, AppData.DEFAULT_COLOR));
 }
 
+// shuffle those bars. 
 for (let i = AppData.MAX_VALUE - 1; i > 0; --i) {
   const randIndex = Math.round(Math.random() * i);
   [bars[randIndex], bars[i]] = [bars[i], bars[randIndex]];
@@ -31,10 +35,23 @@ for (let i = AppData.MAX_VALUE - 1; i > 0; --i) {
 
 function App() {
 
+  const [currAlgo, setCurrAlgo] = useState(Algorithms.SELECTION_SORT);
   const [array, setArray] = useState(bars);
   const generator = useRef<Generator<{ curr: number, left: number, right: number, before: boolean, array: BarData[] }, BarData[], boolean>>(insertionSort(bars));
 
+  const handleAlgoChange = (type: number) => {
+    if (type === Algorithms.INSERTION_SORT) {
+      setCurrAlgo(Algorithms.INSERTION_SORT);
+    }
+  };
+
   const sort = () => {
+    if (currAlgo === Algorithms.INSERTION_SORT) {
+      insertionSortIter();
+    }
+  }
+
+  const insertionSortIter = () => {
     const timer = setInterval(() => {
       const result = generator.current.next();
       if (!result.done) {
@@ -42,7 +59,11 @@ function App() {
         const right = result.value.right;
         const before = result.value.before;
 
-        array[result.value.curr].color = 'green';
+        if (result.value.curr != AppData.MAX_VALUE - 1) {
+          array[result.value.curr].color = 'green';
+        } else {
+          array[result.value.curr].color = AppData.DEFAULT_COLOR;
+        }
 
         if (before) {
           array[left].color = "red";
@@ -62,6 +83,7 @@ function App() {
 
   return (
     <React.Fragment>
+      <AlgoSelector handleChange={handleAlgoChange} />
       <SortButton onClick={sort} />
       <Canvas array={array} />
     </React.Fragment>
