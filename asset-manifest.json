@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/jeetbhow/sorting-algo-visualizer/static/css/main.0d976be0.css",
+    "main.js": "/jeetbhow/sorting-algo-visualizer/static/js/main.763fd7d5.js",
+    "index.html": "/jeetbhow/sorting-algo-visualizer/index.html",
+    "main.0d976be0.css.map": "/jeetbhow/sorting-algo-visualizer/static/css/main.0d976be0.css.map",
+    "main.763fd7d5.js.map": "/jeetbhow/sorting-algo-visualizer/static/js/main.763fd7d5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0d976be0.css",
+    "static/js/main.763fd7d5.js"
+  ]
+}
