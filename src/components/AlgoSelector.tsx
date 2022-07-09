@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
 import { Algorithms } from '../utils/utils';
 
 type Props = {
@@ -6,7 +6,6 @@ type Props = {
 };
 
 function AlgoSelector(props: Props) {
-
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     props.handleChange(Number(event.target.value));
   };
