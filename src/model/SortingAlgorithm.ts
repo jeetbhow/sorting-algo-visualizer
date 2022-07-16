@@ -1,5 +1,4 @@
 import BarCollection from "./BarCollection";
-import BarData from "./BarData";
 
 /**
  * Data type that's returned when the generator in SortingAlgorithm

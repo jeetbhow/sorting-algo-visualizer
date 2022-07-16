@@ -21,7 +21,7 @@ initialCollection.shuffle();
 // Setup for the initial SortingAlgorithm. 
 const initialAlgorithm = new SortingAlgorithm(selectionSort(initialCollection));
 
-// Reducer that changes the current SortingAlgorithm settings. 
+// Reducer that sets the SortingAlgorithm settings. 
 const algorithmReducer = (state: SortingAlgorithm, action: number) => {
   switch (action) {
     case Algorithms.INSERTION_SORT:
@@ -32,15 +32,18 @@ const algorithmReducer = (state: SortingAlgorithm, action: number) => {
 }
 
 function App() {
-  const [currAlgo, setCurrAlgo] = useState(Algorithms.SELECTION_SORT);
   const [collection, setCollection] = useState(initialCollection);
   const [algorithm, dispatchAlgorithm] = useReducer(algorithmReducer, initialAlgorithm);
 
   const handleAlgoChange = (type: number) => {
-    setCurrAlgo(type);
     dispatchAlgorithm(type);
   };
 
+  /**
+   * Calls the next() function on the current instance of SortingAlgorithm 
+   * to generate the next array from the algorithm and to set the colors to 
+   * their appropriate values. 
+   */
   const sort = () => {
     const id = setInterval(() => {
       const result = algorithm.next();
@@ -53,9 +56,21 @@ function App() {
         })
         setCollection(new BarCollection(newItems));
       } else {
+        reset();
         clearInterval(id);
       }
-    }, 50);
+    }, 10);
+  }
+
+  /**
+   * Reset the colors of the bars back to the default color. 
+   */
+  const reset = () => {
+    let newItems = [...collection.getItems()];
+    newItems = newItems.map((barData) => {
+      return new BarData(Color.DEFAULT, barData.data);
+    })
+    setCollection(new BarCollection(newItems));
   }
 
   return (
