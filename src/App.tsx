@@ -1,99 +1,67 @@
 import {
-  AppData,
   Algorithms,
-  GeneratorResult,
-  insertionSortGenerator,
-  selectionSortGenerator,
-  shuffle,
-  createBars
+  selectionSort,
+  Color,
+  AppData,
+  insertionSort
 } from "./utils/utils";
 import React, { useState, useReducer } from "react";
 import Canvas from "./components/Canvas";
 import SortButton from "./components/SortButton";
 import AlgoSelector from "./components/AlgoSelector";
+import BarCollection from "./model/BarCollection";
+import SortingAlgorithm from "./model/SortingAlgorithm";
+import BarData from "./model/BarData";
 
+// Setup for the initial BarCollection. 
+const initialCollection = new BarCollection();
+initialCollection.createBars(AppData.MAX_VALUE);
+initialCollection.shuffle();
 
-// create a series of random bars. 
-const bars = createBars();
-shuffle(bars);
+// Setup for the initial SortingAlgorithm. 
+const initialAlgorithm = new SortingAlgorithm(selectionSort(initialCollection));
 
-const iteratorReducer = (currState: Generator<any, any, any>, action: number) => {
-  const copyArray = [...currState.next().value.array];
+// Reducer that changes the current SortingAlgorithm settings. 
+const algorithmReducer = (state: SortingAlgorithm, action: number) => {
   switch (action) {
-    case Algorithms.SELECTION_SORT:
-      return selectionSortGenerator(copyArray);
     case Algorithms.INSERTION_SORT:
-      return insertionSortGenerator(copyArray);
-    default: return currState;
+      return new SortingAlgorithm(insertionSort(state.next().value.data))
+    default:
+      return new SortingAlgorithm(selectionSort(state.next().value.data));
   }
 }
 
 function App() {
   const [currAlgo, setCurrAlgo] = useState(Algorithms.SELECTION_SORT);
-  const [array, setArray] = useState(bars);
-  const [colors, setColors] = useState([]);
-  const [generator, dispatchIterator] = useReducer(iteratorReducer, selectionSortGenerator(bars));
+  const [collection, setCollection] = useState(initialCollection);
+  const [algorithm, dispatchAlgorithm] = useReducer(algorithmReducer, initialAlgorithm);
 
   const handleAlgoChange = (type: number) => {
-    dispatchIterator(type);
     setCurrAlgo(type);
+    dispatchAlgorithm(type);
   };
 
-  /**
-   * Pick the sorting algorithm that's currently selected and run it. 
-   */
   const sort = () => {
-    let algorithm: Function;
-    switch (currAlgo) {
-      case Algorithms.INSERTION_SORT:
-        algorithm = insertionSort;
-        break;
-      default: algorithm = selectionSort;
-    }
-    const timer = setInterval(() => {
-      algorithm(timer);
-    }, 10);
-  }
-
-  const selectionSort = (timer: NodeJS.Timer) => {
-    const result = generator.next();
-    if (!result.done) {
-      const index = result.value.index;
-      const before = result.value.before;
-      const array = result.value.array;
-
-      if (result.value.iter !== AppData.MAX_VALUE - 1) {
-        array[result.value.iter].color = 'green';
+    const id = setInterval(() => {
+      const result = algorithm.next();
+      if (!result.done && result.value.colors) {
+        const colors = result.value.colors;
+        let newItems = [...collection.getItems()];
+        newItems = newItems.map((barData, index) => {
+          return new BarData(colors![index] ?? Color.DEFAULT, barData.data);
+        })
+        setCollection(new BarCollection(newItems));
       } else {
-        array[result.value.iter].color = AppData.DEFAULT_COLOR;
+        clearInterval(id);
       }
-
-      if (before) {
-        array[index].color = "red";
-      } else {
-        array[index].color = AppData.DEFAULT_COLOR;
-      }
-
-      if (result.value.loop) {
-        array[result.value.iter].color = AppData.DEFAULT_COLOR;
-        array[result.value.index].color = AppData.DEFAULT_COLOR;
-      }
-      setArray([...array]);
-    } else {
-      clearInterval(timer);
-    }
-  }
-
-  const insertionSort = (timer: NodeJS.Timer, generator: Generator<GeneratorResult, number[], boolean>) => {
-    const result: IteratorResult<GeneratorResult, number[]> = generator.next();
-    console.log(result);
+    }, 50);
   }
 
   return (
     <React.Fragment>
       <AlgoSelector handleChange={handleAlgoChange} />
       <SortButton onClick={sort} />
-      <Canvas array={array} />
+      <Canvas array={collection.getItems()} />
     </React.Fragment>
   );
 }

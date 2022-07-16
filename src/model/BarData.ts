@@ -1,11 +1,5 @@
 class BarData {
-  data: number; 
-  color: string;  
-
-  constructor(data: number, color: string) {
-    this.data = data; 
-    this.color = color; 
-  }
+  constructor(public color: string, public data: number) {}
 }
 
-export default BarData; 
+export default BarData;
