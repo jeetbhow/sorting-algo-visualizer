@@ -1,3 +1,4 @@
 .bar {
-  display: inline-block; 
+  display: inline-block;
+  align-self: flex-end;
 }

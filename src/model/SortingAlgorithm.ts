@@ -1,4 +1,5 @@
 import BarCollection from "./BarCollection";
+import BarData from "./BarData";
 
 /**
  * Data type that's returned when the generator in SortingAlgorithm
@@ -6,6 +7,7 @@ import BarCollection from "./BarCollection";
  */
 type TYield = {
   data: BarCollection;
+  tracker?: { index: number; value: number };
   colors?: Record<number, string>;
 };
 

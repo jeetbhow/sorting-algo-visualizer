@@ -25,7 +25,7 @@ const initialAlgorithm = new SortingAlgorithm(selectionSort(initialCollection));
 const algorithmReducer = (state: SortingAlgorithm, action: number) => {
   switch (action) {
     case Algorithms.INSERTION_SORT:
-      return new SortingAlgorithm(insertionSort(state.next().value.data))
+      return new SortingAlgorithm(insertionSort(state.next().value.data));
     default:
       return new SortingAlgorithm(selectionSort(state.next().value.data));
   }
@@ -46,9 +46,10 @@ function App() {
       const result = algorithm.next();
       if (!result.done && result.value.colors) {
         const colors = result.value.colors;
+        const tracker = result.value.tracker;
         let newItems = [...collection.getItems()];
         newItems = newItems.map((barData, index) => {
-          return new BarData(colors![index] ?? Color.DEFAULT, barData.data);
+          return new BarData(colors![index] ?? Color.DEFAULT, tracker?.index === index ? tracker.value : barData.data);
         })
         setCollection(new BarCollection(newItems));
       } else {

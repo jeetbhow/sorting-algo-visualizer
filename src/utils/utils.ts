@@ -17,14 +17,6 @@ export enum Algorithms {
   SELECTION_SORT = 0,
   INSERTION_SORT = 1,
 }
-/**
- * Data type that's yielded/returned by the generator functions
- * for these sorting algorithms.
- */
-export type GeneratorResult = {
-  data: BarData[];
-  colors?: Record<number, string>;
-};
 
 /**
  * Generator for selection sort. Selection sort has a time complexity
@@ -40,7 +32,11 @@ export function* selectionSort(collection: BarCollection) {
   for (let i = 0; i < collection.getSize(); ++i) {
     let min = i;
     for (let j = min; j < collection.getSize(); ++j) {
-      yield { data: collection, colors: { [i]: "green", [j]: "red" } };
+      yield {
+        data: collection,
+        tracker: { index: j, value: collection.getAt(min).data },
+        colors: { [i]: "green", [j]: "red" },
+      };
       if (collection.getAt(j).data < collection.getAt(min).data) {
         min = j;
       }
